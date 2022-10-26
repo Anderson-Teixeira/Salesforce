@@ -38,7 +38,7 @@ trigger TriggerOpp on Opportunity (Before insert, Before update) {
         }
     }
     
-       /* 
+       /* codigo que converte o nome da oportunidade para caracteres em maiusculo antes de salvar o registro 
        
        if(trigger.isBefore && trigger.isInsert){
         
