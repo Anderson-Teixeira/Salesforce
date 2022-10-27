@@ -38,7 +38,7 @@ trigger TriggerOpp on Opportunity (Before insert, Before update) {
         }
     }
     
-       /* codigo que converte o nome da oportunidade para caracteres em maiusculo antes de salvar o registro 
+   /* codigo que converte o nome da oportunidade para caracteres em maiusculo antes de salvar o registro 
        
        if(trigger.isBefore && trigger.isInsert){
         
@@ -51,7 +51,7 @@ trigger TriggerOpp on Opportunity (Before insert, Before update) {
         }
     } 
     
-    */
+    */   
     
     
     
@@ -78,21 +78,7 @@ trigger TriggerOpp on Opportunity (Before insert, Before update) {
         } 
     }
     
-    
-
-    
-    
-    
-    if(trigger.isBefore && trigger.isInsert){  
-        for(Opportunity Opp: trigger.new){
-            
-            if( opp.StageName == 'Perdido' )
-            {
-                opp.addError('Não é possivel Criar uma Oportunidade Como Perdida'); 
-            } 
-        }
-    }
-    
+ 
     
     if(trigger.isBefore && trigger.isInsert){  
         for(Opportunity Opp: trigger.new){
@@ -135,21 +121,30 @@ trigger TriggerOpp on Opportunity (Before insert, Before update) {
             
             if( trigger.oldMap.get(opp.id).Stagename =='Negociação' && opp.StageName == 'Proposta de Valor' )
             {
-                opp.addError('Uma proposta de valor já foi feita, se necessario use a fase Negociação' ); 
+                opp.addError('Uma proposta de valor já foi feita, se necessario faça uma nova negociação');
             }  
         }
     }
     
     
     
-    if(trigger.isBefore && trigger.isInsert || trigger.isBefore && trigger.isUpdate){ 
+    if(trigger.isBefore && trigger.isUpdate){ 
         
         
         for(Opportunity Opp: trigger.new){
             
-            if( opp.StageName != 'Nova Oportunidade' && opp.Quantidade_de_Produtos__c < 1 )
+            if( opp.StageName != 'Nova Oportunidade' && opp.Amount <= 0  )
             {
                 opp.addError('Para Seguir em Negociação deve adicionar um produto a oportunidade ' ); 
+            } 
+        }
+    }
+    
+    if(trigger.isBefore && trigger.isInsert || trigger.isBefore && trigger.isUpdate){
+        for(Opportunity Opp: trigger.new){
+            if(opp.Amount < 0  )
+            {
+                opp.addError('O valor da oportunidade não pode ser Negativo ' ); 
             } 
         }
     }
